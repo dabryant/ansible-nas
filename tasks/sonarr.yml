@@ -15,6 +15,9 @@
       - "{{ sonarr_tv_directory }}:/tv:rw"
       - "{{ sonarr_download_directory }}/complete:/downloads:rw"
       - "{{ sonarr_data_directory }}:/config:rw"
+    networks:
+      - name: "VPN"
+        ipv4_address: "10.2.2.20"
     ports:
       - "{{ sonarr_port }}:8989"
     env:

@@ -1,0 +1,32 @@
+- name: Create Unifi Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ unifi_data_directory }}"
+
+- name: unifi
+  docker_container:
+    name: unifi-controller
+    image: linuxserver/unifi-controller
+    pull: true
+    env:
+      PUID: "{{ unifi_user_id }}"
+      PGID: "{{ unifi_group_id }}"
+    volumes:
+      - "{{ unifi_data_directory }}:/config:rw"
+    ports:
+      - "3478:3478/udp"
+      - "10001:10001/udp"
+      - "8080:8080"
+      - "8081:8081"
+      - "8443:8443"
+      - "8843:8843"
+      - "8880:8880"
+    restart_policy: unless-stopped
+    memory: 1g
+    labels:
+      traefik.backend: "unifi"
+      traefik.frontend.rule: "Host:unifi.{{ ansible_nas_domain }}"
+      traefik.enable: "{{ unifi_available_externally }}"
+      traefik.port: "8443"

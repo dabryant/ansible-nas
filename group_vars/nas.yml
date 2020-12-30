@@ -1,0 +1,179 @@
+##                       ._____.   .__
+##  _____    ____   _____|__\_ |__ |  |   ____             ____ _____    ______
+##  \__  \  /    \ /  ___/  || __ \|  | _/ __ \   ______  /    \\__  \  /  ___/
+##   / __ \|   |  \\___ \|  || \_\ \  |_\  ___/  /_____/ |   |  \/ __ \_\___ \
+##  (____  /___|  /____  >__||___  /____/\___  >         |___|  (____  /____  >
+##       \/     \/     \/        \/          \/               \/     \/     \/
+##     a n s i b l e - n a s      https://github.com/davestephens/ansible-nas
+
+# Add your all.yml config overrides to this file. See group_vars/all.yml for all possible settings.
+
+# Example options
+ansible_nas_hostname: jarvis
+ansible_nas_timezone: America/Chicago
+
+# Update all apt packages when playbook is run
+keep_packages_updated: true
+
+# Will be added to the docker group to give user command line access to docker
+ansible_nas_user: andrew
+
+# Your email and domain, used for Let's Encrypt SSL certs
+ansible_nas_email: dabryant21@gmail.com
+
+# Applications will have subdomain SSL certificates created if Traefik is enabled, e.g. ansible-nas.<your-domain>, nextcloud.<your-domain>
+ansible_nas_domain: abryant.xyz
+
+# Where you want Docker to store its container data.
+docker_home: /home/{{ansible_nas_user}}/docker
+
+###
+### Samba
+###
+# The location where all shares will be created by default. Can be overridden on a per-share basis.
+# This path will be mounted to backup containers, Duplicati
+samba_shares_root: /mnt/storage
+
+# Where stuff downloaded will be stored
+downloads_root: "{{ samba_shares_root }}/Downloads"
+
+# Where your movies are stored
+movies_root: "{{ samba_shares_root }}/Movies"
+
+# Where your TV episodes are stored
+tv_root: "{{ samba_shares_root }}/TV Shows"
+
+# Where your comedy specials are stored
+comedy_root: "{{ samba_shares_root }}/Comedy"
+
+# Where torrent files are stored (picked up by Transmission for downloading)
+torrents_root: "{{ downloads_root }}/~Torrents"
+
+# Where music is stored
+music_root: "{{ samba_shares_root }}/Music"
+
+# Where your books are stored
+books_root: "{{ samba_shares_root }}/Books"
+
+# Where photos are stored
+photos_root: "{{ samba_shares_root }}/Photos"
+
+# The description that'll appear next to your Ansible-NAS box when browsing your network
+samba_server_string: Jarvis
+
+# Shares you want published over Samba.
+samba_shares:
+  - name: Downloads
+    comment: 'Stuff downloaded'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ downloads_root }}"
+
+  - name: Movies
+    comment: 'Movies'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ movies_root }}"
+
+  - name: TV Shows
+    comment: 'TV Episodes'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ tv_root }}"
+
+  - name: Music
+    comment: 'Music'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ music_root }}"
+
+  - name: Games
+    comment: 'Games'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ samba_shares_root }}/Games"
+
+  - name: Pictures
+    comment: 'Pictures'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ photos_root }}"
+
+  - name: Books
+    comment: 'Books'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ books_root }}"
+
+  - name: Storage
+    comment: 'Storage'
+    guest_ok: yes
+    public: yes
+    writable: yes
+    browsable: yes
+    path: "{{ samba_shares_root }}"
+
+# External Access
+traefik_enabled: true
+wireguard_available_externally: true
+
+## Docker Containers  ###########################
+
+## Downloaders
+transmission_enabled: true
+nzbget_enabled: true
+pyload_enabled: true
+
+# Media Serving
+plex_enabled: true
+tautulli_enabled: true
+
+# Media Sourcing
+sonarr_enabled: true
+radarr_enabled: true
+jackett_enabled: true
+
+# System Management
+heimdall_enabled: true
+portainer_enabled: true
+glances_enabled: true
+watchtower_enabled: true
+
+guacamole_enabled: false
+netdata_enabled: false
+
+cloudflare_ddns_enabled: false
+cloudcmd_enabled: false
+virtual_desktop_enabled: false
+krusader_enabled: false
+
+# Backup & Restore
+duplicati_enabled: true
+nextcloud_enabled: true
+
+# Password Management
+bitwarden_enabled: true
+bitwarden_available_externally: true
+bitwarden_admin_token: ZGJdVvpGkr/1OOgc6XRUeZTd3PX+/NKSylC016AXTazIJfPP/x9+Euf8ptvGzASO
+bitwarden_allow_signups: true
+
+# Unifi
+unifi_enabled: true
+unifi_available_externally: "false"
+unifi_data_directory: "{{ docker_home }}/unifi"
+unifi_user_id: 0
+unifi_group_id: 0

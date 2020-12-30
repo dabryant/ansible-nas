@@ -15,6 +15,9 @@
       - "{{ bazarr_tv_directory }}:/tv:rw"
       - "{{ bazarr_movies_directory }}:/movies:rw"
       - "{{ bazarr_data_directory }}:/config:rw"
+    networks:
+      - name: "VPN"
+        ipv4_address: "10.2.2.25"
     ports:
       - "{{ bazarr_port }}:6767"
     env:
