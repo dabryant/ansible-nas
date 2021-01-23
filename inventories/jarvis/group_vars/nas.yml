@@ -152,14 +152,9 @@ heimdall_enabled: true
 portainer_enabled: true
 glances_enabled: true
 watchtower_enabled: true
+cloudcmd_enabled: true
 
-guacamole_enabled: false
-netdata_enabled: false
-
-cloudflare_ddns_enabled: false
-cloudcmd_enabled: false
-virtual_desktop_enabled: false
-krusader_enabled: false
+guacamole_enabled: true
 
 # Backup & Restore
 duplicati_enabled: true
